@@ -17,7 +17,7 @@ class cabcom (
       $packages = [
         'git',
         'python',
-        'python-django',
+        'python-pip',
       ]
     }
     default: {
@@ -26,6 +26,11 @@ class cabcom (
   }
 
   package { $packages: }
+
+  package { 'django':
+    provider => 'pip',
+    require  => Package['python-pip'],
+  }
 
   if $vagrant {
     # Link to the sources.

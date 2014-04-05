@@ -10,8 +10,8 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #config.vm.hostname = "cabcom.local"
-  config.vm.box      = "raring-server-cloudimg-amd64-vagrant-disk1"
-  config.vm.box_url  = "https://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box"
+  config.vm.box      = "ubuntu-1310-x64-virtualbox-puppet"
+  config.vm.box_url  = "http://puppet-vagrant-boxes.puppetlabs.com/ubuntu-1310-x64-virtualbox-puppet.box"
 
   # Forwarded port mapping for access to our project(s).
   config.vm.network :forwarded_port, guest: 8080, host: 8080
