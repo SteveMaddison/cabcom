@@ -1,5 +1,0 @@
-- model: gamelist.list
-  pk: 0
-  fields:
-    name: All Games
-
