@@ -22,6 +22,8 @@ SECRET_KEY = 'a(2^z^_5b*yk&2m0&*)viuk((^2j#^@zm8kg6&1-7qnme9az0p'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
+
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -36,6 +38,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cabcom.gamelist',
+    'cabcom.provider',
+    'cabcom.provider.directory',
+    'cabcom.provider.http',
 )
 
 MIDDLEWARE_CLASSES = (

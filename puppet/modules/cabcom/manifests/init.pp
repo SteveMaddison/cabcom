@@ -18,6 +18,8 @@ class cabcom (
         'git',
         'python',
         'python-pip',
+        'python-yaml',
+        'vim',
       ]
     }
     default: {
