@@ -1,5 +1,4 @@
 from django.db import models
-from cabcom.provider.models import Provider
 
 class List(models.Model):
 	name = models.CharField(max_length=50)
@@ -27,12 +26,12 @@ class Publisher(models.Model):
 
 class Game(models.Model):
 	name = models.CharField(max_length=128)
-	genre = models.ForeignKey(Genre)
-	publisher = models.ForeignKey(Publisher)
-	release_date = models.DateTimeField()
-	platform = models.ForeignKey(Platform)
-	gamelist = models.ManyToManyField(List)
-	provider = models.ForeignKey(Provider)
+	genre = models.ForeignKey(Genre, blank=True, null=True)
+	publisher = models.ForeignKey(Publisher, blank=True, null=True)
+	release_date = models.DateTimeField(blank=True, null=True)
+	platform = models.ForeignKey(Platform, blank=True, null=True)
+	gamelists = models.ManyToManyField(List, blank=True, null=True)
+	provider = models.ForeignKey('provider.Provider')
 
 	def __unicode__(self):
 		return self.name
