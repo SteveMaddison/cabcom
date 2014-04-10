@@ -25,7 +25,8 @@ class Publisher(models.Model):
 		return self.name
 
 class Game(models.Model):
-	name = models.CharField(max_length=128)
+	name = models.CharField(max_length=50)
+	display_name = models.CharField(max_length=128)
 	genre = models.ForeignKey(Genre, blank=True, null=True)
 	publisher = models.ForeignKey(Publisher, blank=True, null=True)
 	release_date = models.DateTimeField(blank=True, null=True)

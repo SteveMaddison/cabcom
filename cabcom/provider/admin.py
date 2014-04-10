@@ -8,7 +8,7 @@ def refresh(modeladmin, request, queryset):
 refresh.short_description = 'Refresh'
 
 class ProviderAdmin(admin.ModelAdmin):
-	list_display = ['name']
+	list_display = ['name','resource_type']
 	ordering = ['name']
 	actions = [refresh]
 
