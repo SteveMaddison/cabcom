@@ -1,5 +1,6 @@
 from django.db import models
 from cabcom.gamelist.models import Game
+from os.path import splitext
 
 RESOURCE_TYPES = (
 	('g', 'Games'),
@@ -25,7 +26,11 @@ class Provider(models.Model):
 			try:
 				for f in self.list():
 					if self.games().filter(name = f).count() == 0:
-						g = Game(name = f, provider = self)
+						g = Game(
+							name = f,
+							provider = self,
+							display_name = splitext(f)[0].title()
+						)
 						g.save()
 
 			except AttributeError:
