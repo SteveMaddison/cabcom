@@ -92,8 +92,9 @@ class Cabrio(FrontEnd):
 		fullscreen.text = str(self.fullscreen).lower()
 		framerate = ET.SubElement(interface, 'framerate')
 		framerate.text = str(self.framerate).lower()
-		theme = ET.SubElement(interface, 'theme')
-		theme.text = str(self.theme)
+		if self.theme:
+			theme = ET.SubElement(interface, 'theme')
+			theme.text = str(self.theme)
 
 		# Interface / Screen
 		screen = ET.SubElement(interface, 'screen')

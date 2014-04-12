@@ -1,11 +1,10 @@
 from django.db import models
-from cabcom.gamelist.models import Game
-from os.path import splitext
 
 RESOURCE_TYPES = (
 	('g', 'Games'),
 	('i', 'Images'),
-	('i', 'Videos'),
+	('v', 'Videos'),
+	('d', 'Data'),
 )
 
 class Provider(models.Model):
@@ -14,41 +13,6 @@ class Provider(models.Model):
 
 	def __unicode__(self):
 		return self.name
-
-	def games(self):
-		return Game.objects.filter(provider = self)
-
-	def clear(self):
-		self.games.delete()
-
-	def refresh(self):
-		added = 0
-
-		if self.resource_type == 'g':
-			try:
-				for f in self.list():
-					if self.games().filter(name = f).count() == 0:
-						g = Game(
-							name = f,
-							provider = self,
-							display_name = splitext(f)[0].title()
-						)
-						g.save()
-						added += 1
-
-			except AttributeError:
-				# No "list" method, OK.
-				pass
-		elif self.resource_type == 'i':
-			# nothing yet
-			return
-		elif self.resource_type == 'v':
-			# nothing yet
-			return
-		else:
-			raise ProviderException('No such resource type.')
-
-		return added
 
 class ProviderException(Exception):
 	def __init__(self, message):

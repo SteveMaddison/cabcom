@@ -1,9 +1,11 @@
 from django.db import models
 from cabcom.provider.models import Provider, ProviderException
+from cabcom.gamelist.models import Game
+from os.path import splitext
 import os
 
 class Directory(Provider):
-	path = models.CharField(max_length=128)
+	path = models.CharField(max_length=256)
 
 	class Meta:
 		verbose_name = 'Directory Provider'
@@ -22,4 +24,34 @@ class Directory(Provider):
 			raise ProviderException('Not a directory.')
 
 		return os.listdir(self.path)
+
+	def refresh(self):
+		added = 0
+
+		if self.resource_type == 'g':
+			games = Game.objects.filter(provider = self)
+
+			for f in self.list():
+				if games.filter(file_name = f).count() == 0:
+					g = Game(
+						name = splitext(f)[0],
+						file_name = f,
+						provider = self,
+						display_name = splitext(f)[0].title(),
+					)
+					g.save()
+					added += 1
+		elif self.resource_type == 'i':
+			# nothing yet
+			return 0
+		elif self.resource_type == 'v':
+			# nothing yet
+			return 0
+		elif self.resource_type == 'd':
+			# nothing yet
+			return 0
+		else:
+			raise ProviderException('No such resource type.')
+
+		return added
 

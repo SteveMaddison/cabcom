@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'cabcom.provider',
     'cabcom.provider.directory',
     'cabcom.provider.http',
+    'cabcom.provider.mame',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -13,6 +13,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box      = "ubuntu-1310-x64-virtualbox-puppet"
   config.vm.box_url  = "http://puppet-vagrant-boxes.puppetlabs.com/ubuntu-1310-x64-virtualbox-puppet.box"
 
+  config.vm.provider "virtualbox" do |vbox|
+    vbox.memory = 1024
+  end
+
   # Forwarded port mapping for access to our project(s).
   config.vm.network :forwarded_port, guest: 8080, host: 8080
 
