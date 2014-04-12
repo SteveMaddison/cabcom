@@ -13,7 +13,7 @@ class Directory(Provider):
 	def __unicode__(self):
 		return self.name
 
-	def list(self):
+	def check(self):
 		if not self.path:
 			raise ProviderException('Path not set.')
 
@@ -23,7 +23,28 @@ class Directory(Provider):
 		if not os.path.isdir(self.path):
 			raise ProviderException('Not a directory.')
 
+	def list(self):
 		return os.listdir(self.path)
+
+	def match(self, name, extension = ''):
+		self.check()
+
+		if not name:
+			raise ProviderException('No name provided.')
+
+		pattern = name + '.' + extension
+		results = []
+
+		if extension:
+			self.check()
+			if os.path.isfile(os.path.join(self.path, pattern)):
+				results.append(pattern)
+		else:
+			for f in self.list():
+				if f.startswith(pattern):
+					results.append(f)
+
+		return results
 
 	def refresh(self):
 		added = 0
