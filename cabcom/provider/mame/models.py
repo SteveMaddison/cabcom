@@ -54,22 +54,23 @@ class Mame(Provider):
 		# it's easiest just to throw all records away and start again.
 		self.clear()
 
+		# Set up an interative XML parser so we can discard processed
+		# items when we're done.
 		context = iterparse(self.xml_file, events=('start', 'end'))
 		context = iter(context)
 		event, root = context.next()
 
 		for event, element in context:
 			if event == 'end' and element.tag == 'game':
-				description = element.find('description').text
-				manufacturer = element.find('manufacturer').text
-
-				if manufacturer:
-					publisher, created = Publisher.objects.get_or_create(name = manufacturer)
+				manufacturer = element.find('manufacturer')
+				if manufacturer != None:
+					publisher, created = Publisher.objects.get_or_create(name = manufacturer.text)
+				else:
+					publisher = None
 
 				if self.resource_type == 'g':
 					item = Game(
 						name = element.get('name'),
-						display_name = description,
 						publisher = publisher,
 						platform = self.platform,
 						provider = self,
@@ -77,32 +78,39 @@ class Mame(Provider):
 				elif self.resource_type == 'd':
 					item = Data(
 						name = element.get('name'),
-						display_name = description,
 						publisher = publisher,
 						platform = self.platform,
 						provider = self,
 					)
 
-				year = element.find('year').text
-				try:
-					int(year)
-					release_date = datetime.strptime('01-01-' + year, '%d-%m-%Y').date()
-					item.release_date = release_date
-				except:
-					pass				
+				description = element.find('description')
+				if description != None:
+					item.display_name = description.text
+
+				year = element.find('year')
+				if year != None:
+					try:
+						int(year.text)
+						# We only know the year, so just fill in 1st January.
+						release_date = datetime.strptime('01-01-' + year.text, '%d-%m-%Y').date()
+						item.release_date = release_date
+					except:
+						pass				
 
 				item.save()
 
-				for control in element.find('input').findall('control'):
-					control_type_name = control.get('type')
-					control_type, created = ControlType.objects.get_or_create(name = control_type_name)
-					item.control_types.add(control_type)
+				input_element = element.find('input')
+				if input_element != None:
+					controls = input_element.findall('control')
+					if controls != None:
+						for control in controls:
+							control_type_name = control.get('type')
+							control_type, created = ControlType.objects.get_or_create(name = control_type_name)
+							item.control_types.add(control_type)
 
 				root.clear()
 				added += 1
 
-				if added == 10:
-					return added
-
 		return added
+
 

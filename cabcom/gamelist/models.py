@@ -45,4 +45,34 @@ class Data(GameData):
 	pass
 
 class Game(GameData):
-	pass
+	def populate(self, replace = True):
+		updated = False
+
+		# TODO: handle multiple matches.
+		data = Data.objects.filter(name = self.name).first()
+		if data:
+			if replace or not self.display_name:
+				self.display_name = data.display_name
+				updated = True
+			if replace or not self.genre:
+				self.genre = data.genre
+				updated = True
+			if replace or not self.publisher:
+				self.publisher = data.publisher
+				updated = True
+			if replace or not self.release_date:
+				self.release_date = data.release_date
+				updated = True
+			if replace or not self.platform:
+				self.platform = data.platform
+				updated = True
+			if replace or not self.control_types.all():
+				self.control_types.all().delete()
+				for control_type in data.control_types.all():
+					self.control_types.add(control_type)
+				updated = True
+
+			self.save()
+
+		return updated
+
