@@ -1,9 +1,13 @@
-from django.contrib import admin
-from cabcom.provider.models import Provider
+from django.contrib import admin, messages
+from cabcom.provider.models import Provider, ProviderException
 
 def refresh(modeladmin, request, queryset):
-	for p in queryset:
-		p.refresh()
+	try:
+		for p in queryset:
+			p.refresh()
+	except ProviderException as e:
+		msg = str(p) + ': ' + e.message
+		modeladmin.message_user(request, msg, messages.ERROR)
 
 refresh.short_description = 'Refresh'
 

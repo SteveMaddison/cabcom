@@ -46,9 +46,9 @@ class Provider(models.Model):
 			raise ProviderException('No such resource type.')
 
 class ProviderException(Exception):
-	def __init__(self, value):
-		self.value = value
+	def __init__(self, message):
+		self.message = message
 
 	def __unicode__(self):
-		return repr(self.value)
+		return self.message
 
