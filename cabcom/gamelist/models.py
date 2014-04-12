@@ -1,11 +1,5 @@
 from django.db import models
 
-class List(models.Model):
-	name = models.CharField(max_length=50)
-
-	def __unicode__(self):
-		return self.name
-
 class Genre(models.Model):
 	name = models.CharField(max_length=50)
 
@@ -31,8 +25,14 @@ class Game(models.Model):
 	publisher = models.ForeignKey(Publisher, blank=True, null=True)
 	release_date = models.DateTimeField(blank=True, null=True)
 	platform = models.ForeignKey(Platform, blank=True, null=True)
-	gamelists = models.ManyToManyField(List, blank=True, null=True)
 	provider = models.ForeignKey('provider.Provider')
+
+	def __unicode__(self):
+		return self.name
+
+class List(models.Model):
+	name = models.CharField(max_length=50)
+	games = models.ManyToManyField(Game, blank=True, null=True)
 
 	def __unicode__(self):
 		return self.name

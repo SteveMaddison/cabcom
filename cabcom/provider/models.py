@@ -22,6 +22,8 @@ class Provider(models.Model):
 		self.games.delete()
 
 	def refresh(self):
+		added = 0
+
 		if self.resource_type == 'g':
 			try:
 				for f in self.list():
@@ -32,6 +34,7 @@ class Provider(models.Model):
 							display_name = splitext(f)[0].title()
 						)
 						g.save()
+						added += 1
 
 			except AttributeError:
 				# No "list" method, OK.
@@ -44,6 +47,8 @@ class Provider(models.Model):
 			return
 		else:
 			raise ProviderException('No such resource type.')
+
+		return added
 
 class ProviderException(Exception):
 	def __init__(self, message):
