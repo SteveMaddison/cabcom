@@ -39,6 +39,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cabcom.gamelist',
+    'cabcom.frontend',
+    'cabcom.frontend.cabrio',
     'cabcom.provider',
     'cabcom.provider.directory',
     'cabcom.provider.http',

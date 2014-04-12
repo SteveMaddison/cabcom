@@ -19,6 +19,7 @@ class cabcom (
         'python',
         'python-pip',
         'python-yaml',
+        'sqlite3',
         'vim',
       ]
     }
