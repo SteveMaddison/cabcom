@@ -1,0 +1,4 @@
+.vagrant
+*.pyc
+db.sqlite3
+mame.xml
