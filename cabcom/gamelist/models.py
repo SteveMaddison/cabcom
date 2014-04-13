@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 
 class Genre(models.Model):
 	name = models.CharField(max_length = 50, unique = True)
@@ -81,9 +82,22 @@ class Filter(models.Model):
 	genres = models.ManyToManyField(Genre, blank = True, null = True)
 	publishers = models.ManyToManyField(Publisher, blank = True, null = True)
 	platforms = models.ManyToManyField(Platform, blank = True, null = True)
-	control_types = models.ManyToManyField(ControlType, blank = True, null = True)
+	# TODO: add this
+	#control_types = models.ManyToManyField(ControlType, blank = True, null = True)
 	providers = models.ManyToManyField('provider.Provider', blank = True, null = True)
 
 	def __unicode__(self):
 		return self.name
 
+	def games(self):
+		genre_criteria = Q(genre__in = self.genres.all()) if self.genres.count() > 0 else Q()
+		publisher_criteria = Q(publisher__in = self.publishers.all()) if self.publishers.count() > 0 else Q()
+		platform_criteria = Q(platform__in = self.platforms.all()) if self.platforms.count() > 0 else Q()
+		provider_criteria = Q(provider__in = self.providers.all()) if self.providers.count() > 0 else Q()
+
+		return Game.objects.filter(
+			genre_criteria,
+			publisher_criteria,
+			platform_criteria,
+			provider_criteria,
+		)

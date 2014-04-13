@@ -94,13 +94,30 @@ class GameList(models.Model):
 
 		return file_name.lower() + '.xml'
 
+	def games(self):
+		if self.filter:
+			return self.filter.games()
+		else:
+			return Game.objects.all()
+
 	def config(self):
 		root = ET.Element('cabrio-config')
 
-		# Interface / General
+		# General
 		game_list = ET.SubElement(root, 'game-list')
 		name = ET.SubElement(game_list, 'name')
 		name.text = str(self.name)
+		games = ET.SubElement(game_list, 'games')
+
+		# Game entries
+		total = 0
+		for g in self.games():
+			game = ET.SubElement(games, 'game')
+			name = ET.SubElement(game, 'name')
+			name.text = str(g.name)
+			total += 1
+
+		print total
 
 		return ET.tostring(root)
 
@@ -219,19 +236,21 @@ class Cabrio(FrontEnd):
 		# Main config file.
 		try:
 			f = open(os.path.join(self.config_dir, 'config.xml'), 'w')
-			xml = minidom.parseString(self.config())
-			f.write(xml.toprettyxml())
-			f.close()
 		except:
 			raise FrontEndException('Unable to open file for writing.')
+
+		xml = minidom.parseString(self.config())
+		f.write(xml.toprettyxml())
+		f.close()
 
 		# Game lists in separate files.
 		for gl in GameList.objects.all():
 			try:
 				f = open(os.path.join(self.config_dir, gl.file_name()), 'w')
-				xml = minidom.parseString(gl.config())
-				f.write(xml.toprettyxml())
-				f.close()
 			except:
 				raise FrontEndException('Unable to open file for writing.')
+
+			xml = minidom.parseString(gl.config())
+			f.write(xml.toprettyxml())
+			f.close()
 
