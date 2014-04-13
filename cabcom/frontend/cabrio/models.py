@@ -4,7 +4,7 @@ from cabcom.gamelist.models import Game, Filter
 from cabcom.provider.models import Provider
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
-import os
+import os, errno
 import re
 
 EVENT_TYPES = (
@@ -259,7 +259,13 @@ class Cabrio(FrontEnd):
 			raise FrontEndException('No configuration directory set.')
 
 		if not os.path.exists(self.config_dir):
-			raise FrontEndException('No such file or directory.')
+			try:
+				os.makedirs(self.config_dir)
+			except OSError as e:
+				if e.errno == errno.EXIST and os.path.isdir(self.config_dir):
+					pass
+				else:
+					raise FrontEndException('Unable to create directory.')
 
 		if not os.path.isdir(self.config_dir):
 			raise FrontEndException('Not a directory.')
