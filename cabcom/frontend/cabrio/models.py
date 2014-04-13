@@ -120,7 +120,11 @@ class GameList(models.Model):
 				name.text = str(g.display_name)
 
 			rom = ET.SubElement(game, 'rom-image')
+<<<<<<< HEAD
 			rom.text = str(g.file_name)
+=======
+			rom.text = g.file_name
+>>>>>>> 531c6000f43304bc241b67fe2b59beabf25b777a
 
 			if g.platform:
 				platform = ET.SubElement(game, 'platform')
