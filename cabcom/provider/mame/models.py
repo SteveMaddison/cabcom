@@ -48,7 +48,7 @@ class Mame(Provider):
 				# Run MAME to get the game list XML.
 				f = open(self.xml_file, 'w')
 				f.write(subprocess.check_output([self.executable, '-listxml']))
-				f.close
+				f.close()
 
 		# As the data can always be restored by re-running the import,
 		# it's easiest just to throw all records away and start again.

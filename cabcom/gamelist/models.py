@@ -76,3 +76,14 @@ class Game(GameData):
 
 		return updated
 
+class Filter(models.Model):
+	name = models.CharField(max_length = 50)
+	genres = models.ManyToManyField(Genre, blank = True, null = True)
+	publishers = models.ManyToManyField(Publisher, blank = True, null = True)
+	platforms = models.ManyToManyField(Platform, blank = True, null = True)
+	control_types = models.ManyToManyField(ControlType, blank = True, null = True)
+	providers = models.ManyToManyField('provider.Provider', blank = True, null = True)
+
+	def __unicode__(self):
+		return self.name
+

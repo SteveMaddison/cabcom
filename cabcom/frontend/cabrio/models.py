@@ -1,6 +1,11 @@
 from django.db import models
-from cabcom.frontend.models import FrontEnd
+from cabcom.frontend.models import FrontEnd, FrontEndException
+from cabcom.gamelist.models import Game, Filter
+from cabcom.provider.models import Provider
 import xml.etree.ElementTree as ET
+import xml.dom.minidom as minidom
+import os
+import re
 
 EVENT_TYPES = (
 	('u', 'Up'),
@@ -38,6 +43,13 @@ GFX_VALUES = (
 	('h', 'High'),
 )
 
+LOCATION_TYPES = (
+	('b', 'Background'),
+	('l', 'Logo'),
+	('s', 'Screenshot'),
+	('v', 'Video'),
+)
+
 class Control(models.Model):
 	event = models.CharField(max_length = 1, choices = EVENT_TYPES, unique = True)
 	device_type = models.CharField(max_length = 1, choices = DEVICE_TYPES)
@@ -61,7 +73,50 @@ class Theme(models.Model):
 	def __unicode__(self):
 		return self.name
 
+class GameList(models.Model):
+	name = models.CharField(max_length = 50)
+	filter = models.ForeignKey(Filter, blank = True, null = True)
+
+	class Meta:
+		verbose_name = 'Cabrio Game List'
+
+	def __unicode__(self):
+		return self.name
+
+	def file_name(self):
+		file_name = self.name
+
+		non_alphanum = re.compile('[\s \W]+')
+		file_name = non_alphanum.sub('_', file_name)
+
+		normalise = re.compile('_+')
+		file_name = normalise.sub('_', file_name)
+
+		return file_name.lower() + '.xml'
+
+	def config(self):
+		root = ET.Element('cabrio-config')
+
+		# Interface / General
+		game_list = ET.SubElement(root, 'game-list')
+		name = ET.SubElement(game_list, 'name')
+		name.text = str(self.name)
+
+		return ET.tostring(root)
+
+class Location(models.Model):
+	type = models.CharField(max_length = 1, choices = LOCATION_TYPES)
+	provider = models.ForeignKey(Provider)
+
+	class Meta:
+		verbose_name = 'Cabrio Location'
+
+	def __unicode__(self):
+		return str(self.get_type_display())
+
 class Cabrio(FrontEnd):
+	config_dir = models.CharField(max_length = 256)
+
 	# General config
 	fullscreen = models.BooleanField(default = True)
 	framerate = models.IntegerField(default = 60)
@@ -140,5 +195,43 @@ class Cabrio(FrontEnd):
 			value = ET.SubElement(event, 'value')
 			value.text = str(c.value).lower()
 
+		# Locations
+		locations = ET.SubElement(root, 'locations')
+		for l in Location.objects.all():
+			location = ET.SubElement(locations, 'location')
+			type = ET.SubElement(location, 'type')
+			type.text = str(l.get_type_display()).lower()
+			directory = ET.SubElement(location, 'directory')
+			directory.text = str(l.provider.directory.path)
+
 		return ET.tostring(root)
+
+	def generate_config(self):
+		if not self.config_dir:
+			raise FrontEndException('No configuration directory set.')
+
+		if not os.path.exists(self.config_dir):
+			raise FrontEndException('No such file or directory.')
+
+		if not os.path.isdir(self.config_dir):
+			raise FrontEndException('Not a directory.')
+
+		# Main config file.
+		try:
+			f = open(os.path.join(self.config_dir, 'config.xml'), 'w')
+			xml = minidom.parseString(self.config())
+			f.write(xml.toprettyxml())
+			f.close()
+		except:
+			raise FrontEndException('Unable to open file for writing.')
+
+		# Game lists in separate files.
+		for gl in GameList.objects.all():
+			try:
+				f = open(os.path.join(self.config_dir, gl.file_name()), 'w')
+				xml = minidom.parseString(gl.config())
+				f.write(xml.toprettyxml())
+				f.close()
+			except:
+				raise FrontEndException('Unable to open file for writing.')
 
