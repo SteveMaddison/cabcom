@@ -110,14 +110,45 @@ class GameList(models.Model):
 		games = ET.SubElement(game_list, 'games')
 
 		# Game entries
-		total = 0
 		for g in self.games():
 			game = ET.SubElement(games, 'game')
 			name = ET.SubElement(game, 'name')
-			name.text = str(g.name)
-			total += 1
 
-		print total
+			if g.display_name:
+				name.text = str(g.display_name)
+			else:
+				name.text = str(g.display_name)
+
+			rom = ET.SubElement(game, 'rom-image')
+			rom.text = str(g.file_name)
+
+			if g.platform:
+				platform = ET.SubElement(game, 'platform')
+				platform.text = str(g.platform)
+
+			categories = ET.SubElement(game, 'categories')
+
+			if g.genre:
+				category = ET.SubElement(categories, 'category')
+				name = ET.SubElement(category, 'name')
+				name.text = 'Genre'
+				value = ET.SubElement(category, 'value')
+				value.text = str(g.genre)
+
+			if g.publisher:
+				category = ET.SubElement(categories, 'category')
+				name = ET.SubElement(category, 'name')
+				name.text = 'Publisher'
+				value = ET.SubElement(category, 'value')
+				value.text = str(g.publisher)
+
+			if g.control_types.count() > 0:
+				for c in g.control_types.all():
+					category = ET.SubElement(categories, 'category')
+					name = ET.SubElement(category, 'name')
+					name.text = 'Control'
+					value = ET.SubElement(category, 'value')
+					value.text = str(c)
 
 		return ET.tostring(root)
 
