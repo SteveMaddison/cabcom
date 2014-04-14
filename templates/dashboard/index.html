@@ -1,0 +1,16 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }}{% trans 'Cabcom Dashboard' %}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'Cabcom Dashboard' %}</h1>
+{% endblock %}
+
+{% block content_title %}
+<h2>We have {{ game_count }} games!</h2>
+{% endblock %}
+
+{% block content %}
+<p>Total games in database: {{ data_count }}</p>
+{% endblock %}
