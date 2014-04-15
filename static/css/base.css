@@ -14,3 +14,7 @@ th, td {
 .center {
 	text-align: center;
 }
+
+h1,h2,h3,th {
+	color: #2580a2;
+}
