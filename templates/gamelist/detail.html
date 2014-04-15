@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }}{% trans 'Cabcom Games' %}{% endblock %}
+
+{% block content_title %}
+Games
+{% endblock %}
+
+{% block content %}
+<h2>
+{% if game.display_name %}
+{{ game.display_name }}
+{% else %}
+{{ game.name }}
+{% endif %}
+</h2>
+
+<table>
+	<tr>
+		<th>Name</th>
+		<td>{{ game.name }}</td>
+	</tr>
+	<tr>
+		<th>File name</th>
+		<td>{{ game.file_name }}</td>
+	</tr>
+	<tr>
+		<th>Genre</th>
+		<td>{{ game.genre }}</td>
+	</tr>
+	<tr>
+		<th>Platform</th>
+		<td>{{ game.platform }}</td>
+	</tr>
+	<tr>
+		<th>Publisher</th>
+		<td>{{ game.publisher }}</td>
+	</tr>
+	<tr>
+		<th>Release Date</th>
+		<td>{{ game.release_date }}</td>
+	</tr>
+	<tr>
+		<th>Provider</th>
+		<td>{{ game.provider }}</td>
+	</tr>
+</table>
+{% endblock %}

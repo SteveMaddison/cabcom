@@ -8,6 +8,37 @@ Games
 {% endblock %}
 
 {% block content %}
-<h2>Yes, we have {{ game_count }} games!</h2>
-<p>Total games in database: {{ data_count }}</p>
+<p>Game {{ first }}-{{ last }} of {{ games.count }}</p>
+
+<table class="list">
+	<tr>
+		<th>Game</th>
+		<th>Genre</th>
+		<th>Platform</th>
+		<th>Publisher</th>
+		<th>Release Date</th>
+		<th>Resources</th>
+	</tr>
+	{% for game in games %}
+	<tr>
+		<td>
+			<a href="{% url 'gamelist:index' %}{{ game.id }}/">
+			{% if game.display_name %}
+			{{ game.display_name }}
+			{% else %}
+			{{ game.name }}
+			{% endif %}
+			</a>
+		</td>
+		<td>{{ game.genre }}</td>
+		<td>{{ game.platform }}</td>
+		<td>{{ game.publisher }}</td>
+		<td>{{ game.release_date }}</td>
+		<td>
+		</td>
+	</tr>
+	{% empty %}
+	<p>No games yet</p>
+	{% endfor %}
+</table>
 {% endblock %}
