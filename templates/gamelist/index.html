@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}{{ title }}{% trans 'Cabcom Dashboard' %}{% endblock %}
+{% block title %}{{ title }}{% trans 'Cabcom Games' %}{% endblock %}
 
 {% block content_title %}
-Dashboard
+Games
 {% endblock %}
 
 {% block content %}
-<h2>We have {{ game_count }} games!</h2>
+<h2>Yes, we have {{ game_count }} games!</h2>
 <p>Total games in database: {{ data_count }}</p>
 {% endblock %}
