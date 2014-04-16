@@ -21,16 +21,22 @@
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="{% url 'dashboard:index' %}">Home</a></li>
-          <li class="dropdown">
+          <li class="{% if menu_active == 'home' %}active{% endif %}"><a href="{% url 'dashboard:index' %}">Home</a></li>
+          <li class="dropdown{% if menu_active == 'game' %} active{% endif %}">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Games <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="{% url 'gamelist:index' %}game/">Game List</a></li>
-              <li class="divider"></li>
-              <li><a href="{% url 'gamelist:index' %}data/">Game Database</a></li>
+              <li><a href="{% url 'gamelist:index' %}game/">List</a></li>
+              <li><a href="#">Import</a></li>
             </ul>
           </li>
-          <li class="dropdown">
+          <li class="dropdown{% if menu_active == 'data' %} active{% endif %}">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Database <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'gamelist:index' %}data/">List</a></li>
+              <li><a href="#">Import</a></li>
+            </ul>
+          </li>
+          <li class="dropdown{% if menu_active == 'frontend' %} active{% endif %}">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Front Ends <b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="#">Cabrio</a></li>
@@ -41,7 +47,7 @@
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li class="dropdown">
+          <li class="dropdown{% if menu_active == 'admin' %} active{% endif %}">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Name <b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="#">Log out</a></li>

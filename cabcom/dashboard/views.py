@@ -4,7 +4,8 @@ from cabcom.gamelist.models import Data, Game
 
 def index(request):
 	context = {
-		'data_count': Data.objects.count(),
-		'game_count': Game.objects.count(),
+		'menu_active': 'home',
+		'data_count' : Data.objects.count(),
+		'game_count' : Game.objects.count(),
 	}
 	return render(request, 'dashboard/index.html', context)

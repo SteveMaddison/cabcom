@@ -15,11 +15,12 @@ def index(request, object_type):
 		raise Http404
 
 	context = {
-		'title' : title,
-		'first' : 1,
-		'last'  :  50,
-		'count' : count,
-		'games' : items,
+		'title'      : title,
+		'menu_active': object_type,
+		'first'      : 1,
+		'last'       : 50,
+		'count'      : count,
+		'games'      : items,
 		'object_type': object_type,
 	}
 
@@ -27,11 +28,20 @@ def index(request, object_type):
 
 def detail(request, object_type, game_id):
 	if object_type == 'game':
-		game = get_object_or_404(Game, pk=game_id)
+		title = 'Game List'
+		game  = get_object_or_404(Game, pk=game_id)
 	elif object_type == 'data':
-		game = get_object_or_404(Data, pk=game_id)
+		title = 'Game Database'
+		game  = get_object_or_404(Data, pk=game_id)
 	else:
 		raise Http404
 
-	return render(request, 'gamelist/detail.html', {'game': game})
+	context = {
+		'title'      : title,
+		'menu_active': object_type,
+		'game'       : game,
+		'object_type': object_type,
+	}
+
+	return render(request, 'gamelist/detail.html', context)
 
