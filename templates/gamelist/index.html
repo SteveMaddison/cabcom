@@ -3,15 +3,14 @@
 
 {% block title %}{{ title }}{% trans 'Cabcom Games' %}{% endblock %}
 
-{% block content_title %}
-Games
-{% endblock %}
+{% block content_title %}{{ title }}{% endblock %}
 
 {% block content %}
-<p>Game {{ first }}-{{ last }} of {{ games.count }}</p>
+<p>Game {{ first }}-{{ last }} of {{ count }}</p>
 
 <table class="table table-striped">
 	<tr>
+		<th><input type="checkbox"/></th>
 		<th>Game</th>
 		<th>Genre</th>
 		<th>Platform</th>
@@ -21,8 +20,9 @@ Games
 	</tr>
 	{% for game in games %}
 	<tr>
+		<td><input type="checkbox"/></td>
 		<td>
-			<a href="{% url 'gamelist:index' %}{{ game.id }}/">
+			<a href="{% url 'gamelist:index' %}{{ object_type }}/{{ game.id }}/">
 			{% if game.display_name %}
 			{{ game.display_name }}
 			{% else %}
