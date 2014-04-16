@@ -10,36 +10,44 @@
 <p>Game {{ first }}-{{ last }} of {{ count }}</p>
 
 <table class="table table-striped">
-	<tr>
-		<th><input type="checkbox"/></th>
-		<th>Game</th>
-		<th>Genre</th>
-		<th>Platform</th>
-		<th>Publisher</th>
-		<th>Release Date</th>
-		<th>Resources</th>
-	</tr>
-	{% for game in games %}
-	<tr>
-		<td><input type="checkbox"/></td>
-		<td>
-			<a href="{% url 'gamelist:index' %}{{ object_type }}/{{ game.id }}/">
-			{% if game.display_name %}
-			{{ game.display_name }}
-			{% else %}
-			{{ game.name }}
-			{% endif %}
-			</a>
-		</td>
-		<td>{{ game.genre }}</td>
-		<td>{{ game.platform }}</td>
-		<td>{{ game.publisher }}</td>
-		<td>{{ game.release_date }}</td>
-		<td>
-		</td>
-	</tr>
-	{% empty %}
-	<p>No games yet</p>
-	{% endfor %}
+	<thead>
+		<tr class="info">
+			<th><input type="checkbox"/></th>
+			<th>Game</th>
+			<th>Genre</th>
+			<th>Platform</th>
+			<th>Publisher</th>
+			<th>Release Date</th>
+			<th>Resources</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for game in games %}
+		<tr>
+			<td><input type="checkbox"/></td>
+			<td>
+				<a href="{% url 'gamelist:index' %}{{ object_type }}/{{ game.id }}/">
+				{% if game.display_name %}
+				{{ game.display_name }}
+				{% else %}
+				{{ game.name }}
+				{% endif %}
+				</a>
+			</td>
+			<td>{{ game.genre }}</td>
+			<td>{{ game.platform }}</td>
+			<td>{{ game.publisher }}</td>
+			<td>{{ game.release_date }}</td>
+			<td>
+				<button class="button btn-xs btn-success"><span class="glyphicon glyphicon-tag" alt="Title"></span></button>
+				<button class="button btn-xs btn-success"><span class="glyphicon glyphicon-camera"></span></button>
+				<button class="button btn-xs btn-success"><span class="glyphicon glyphicon-film"></span></button>
+				<button class="button btn-xs btn-success"><span class="glyphicon glyphicon-picture"/></span></button>
+			</td>
+		</tr>
+		{% empty %}
+		<p>No games yet</p>
+		{% endfor %}
+	</tbody>
 </table>
 {% endblock %}
