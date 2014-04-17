@@ -7,47 +7,68 @@
 {% block content_title %}{{ title }}{% endblock %}
 
 {% block content %}
-<p>Game {{ first }}-{{ last }} of {{ count }}</p>
+{% if games %}
+	<table class="table table-striped">
+		<thead>
+			<tr class="info">
+				<th><input type="checkbox"/></th>
+				<th>Game</th>
+				<th>Genre</th>
+				<th>Platform</th>
+				<th>Publisher</th>
+				<th>Release Date</th>
+				<th>Resources</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for game in games %}
+			<tr>
+				<td><input type="checkbox"/></td>
+				<td>
+					<a href="{% url 'gamelist:index' %}{{ detail_type }}/{{ game.id }}/">
+					{% if game.display_name %}
+					{{ game.display_name }}
+					{% else %}
+					{{ game.name }}
+					{% endif %}
+					</a>
+				</td>
+				<td>{{ game.genre }}</td>
+				<td>{{ game.platform }}</td>
+				<td>{{ game.publisher }}</td>
+				<td>{{ game.release_date }}</td>
+				<td>
+					<span class="label label-success"><span class="glyphicon glyphicon-tag"></span></span>
+					<span class="label label-success"><span class="glyphicon glyphicon-camera"></span></span>
+					<span class="label label-success"><span class="glyphicon glyphicon-film"></span></span>
+					<span class="label label-success"><span class="glyphicon glyphicon-picture"></span></span>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 
-<table class="table table-striped">
-	<thead>
-		<tr class="info">
-			<th><input type="checkbox"/></th>
-			<th>Game</th>
-			<th>Genre</th>
-			<th>Platform</th>
-			<th>Publisher</th>
-			<th>Release Date</th>
-			<th>Resources</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for game in games %}
-		<tr>
-			<td><input type="checkbox"/></td>
-			<td>
-				<a href="{% url 'gamelist:index' %}{{ object_type }}/{{ game.id }}/">
-				{% if game.display_name %}
-				{{ game.display_name }}
-				{% else %}
-				{{ game.name }}
-				{% endif %}
-				</a>
-			</td>
-			<td>{{ game.genre }}</td>
-			<td>{{ game.platform }}</td>
-			<td>{{ game.publisher }}</td>
-			<td>{{ game.release_date }}</td>
-			<td>
-				<button class="button btn-xs btn-success"><span class="glyphicon glyphicon-tag" alt="Title"></span></button>
-				<button class="button btn-xs btn-success"><span class="glyphicon glyphicon-camera"></span></button>
-				<button class="button btn-xs btn-success"><span class="glyphicon glyphicon-film"></span></button>
-				<button class="button btn-xs btn-success"><span class="glyphicon glyphicon-picture"/></span></button>
-			</td>
-		</tr>
-		{% empty %}
-		<p>No games yet</p>
-		{% endfor %}
-	</tbody>
-</table>
+	{% if is_paginated %}
+	<div class="pull-right">
+		<ul class="pagination">
+			<li><a href="?page=1"><span class="glyphicon glyphicon-fast-backward"></span></a></li>
+			{% if page_obj.has_previous %}
+			<li><a href="?page={{ page_obj.previous_page_number }}"><span class="glyphicon glyphicon-backward"></span></a></li>
+			{% else %}
+			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-backward"></span></a></li>
+			{% endif %}
+			<li class="disabled"><a href="#">{{ page_obj.number }}/{{ page_obj.paginator.num_pages }}</a></li>
+			{% if page_obj.has_next %}
+			<li><a href="?page={{ page_obj.next_page_number }}"><span class="glyphicon glyphicon-forward"></span></a></li>
+			{% else %}
+			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-forward"></span></a></li>
+			{% endif %}
+			<li><a href="?page={{ page_obj.paginator.num_pages }}"><span class="glyphicon glyphicon-fast-forward"></span></a></li>
+		</ul>
+	</div>
+	{% endif %}
+{% else %}
+	<p>No games yet</p>
+{% endif %}
+
 {% endblock %}

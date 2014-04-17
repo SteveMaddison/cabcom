@@ -1,47 +1,55 @@
 from django.http import Http404
+from django.views.generic import ListView, DetailView
+from django.views.generic.base import RedirectView
 from django.shortcuts import render, get_object_or_404
-from cabcom.gamelist.models import Data, Game
+from cabcom.gamelist.models import Game, Data
 
-def index(request, object_type):
-	if object_type == 'game':
-		title = 'Game List'
-		items = Game.objects.all()[0:49]
-		count = Game.objects.count()
-	elif object_type == 'data':
-		title = 'Game Database'
-		items = Data.objects.all()[0:49]
-		count = Data.objects.count()
-	else:
-		raise Http404
+class IndexView(RedirectView):
+	permanent = True
+	query_string = True
 
-	context = {
-		'title'      : title,
-		'menu_active': object_type,
-		'first'      : 1,
-		'last'       : 50,
-		'count'      : count,
-		'games'      : items,
-		'object_type': object_type,
-	}
+	def get_redirect_url(self):
+		return reverse('game')
 
-	return render(request, 'gamelist/index.html', context)
+class GameListView(ListView):
+	model = Game
+	template_name = 'gamelist/index.html'
+	context_object_name = 'games'
+	paginate_by = 50
 
-def detail(request, object_type, game_id):
-	if object_type == 'game':
-		title = 'Game List'
-		game  = get_object_or_404(Game, pk=game_id)
-	elif object_type == 'data':
-		title = 'Game Database'
-		game  = get_object_or_404(Data, pk=game_id)
-	else:
-		raise Http404
+	def get_context_data(self, **kwargs):
+		context = super(GameListView, self).get_context_data(**kwargs)
+		context['title'] = 'Game List'
+		context['detail_type'] = 'game'
+		context['menu_active'] = 'game'
+		return context
 
-	context = {
-		'title'      : title,
-		'menu_active': object_type,
-		'game'       : game,
-		'object_type': object_type,
-	}
+class DataListView(GameListView):
+	model = Data
 
-	return render(request, 'gamelist/detail.html', context)
+	def get_context_data(self, **kwargs):
+		context = super(DataListView, self).get_context_data(**kwargs)
+		context['title'] = 'Game Database'
+		context['detail_type'] = 'data'
+		context['menu_active'] = 'data'
+		return context
 
+class GameDetailView(DetailView):
+	model = Game
+	context_object_name = 'game'
+	template_name = 'gamelist/detail.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(GameDetailView, self).get_context_data(**kwargs)
+		context['title'] = 'Game List'
+		context['menu_active'] = 'game'
+		return context
+
+class DataDetailView(GameDetailView):
+	model = Data
+
+	def get_context_data(self, **kwargs):
+		context = super(DataDetailView, self).get_context_data(**kwargs)
+		context['title'] = 'Game Database'
+		context['menu_active'] = 'data'
+		return context
