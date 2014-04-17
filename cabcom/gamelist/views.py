@@ -12,9 +12,10 @@ class IndexView(RedirectView):
 		return reverse('game')
 
 class GameListView(ListView):
-	model = Game
+	queryset = Game.objects.order_by('display_name')
 	template_name = 'gamelist/index.html'
 	context_object_name = 'games'
+	ordering = ['-display_name']
 	paginate_by = 50
 
 	def get_context_data(self, **kwargs):
@@ -25,7 +26,7 @@ class GameListView(ListView):
 		return context
 
 class DataListView(GameListView):
-	model = Data
+	queryset = Data.objects.order_by('display_name')
 
 	def get_context_data(self, **kwargs):
 		context = super(DataListView, self).get_context_data(**kwargs)

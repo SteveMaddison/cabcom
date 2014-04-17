@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }}{% trans 'Cabcom Games' %}{% endblock %}
+
+{% block content_title %}MAME{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h4>Configuration</h4>
+			</div>
+			<table class="table">
+				<tr>
+					<th>MAME Executable</th>
+					<td>{{ object.executable }}</td>
+				</tr>
+				<tr>
+					<th>XML File</th>
+					<td>{{ mame.xml_file }}</td>
+				</tr>
+				<tr>
+					<th>Platform</th>
+					<td>{{ mame.platform }}</td>
+				</tr>
+			</table>
+		</div>
+		<div>
+			<button type="button" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
+			<button type="button" class="btn btn-lg btn-success"><span class="glyphicon glyphicon-download-alt"></span> Import</button>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<p>
+					<strong>The MAME emulator can be used to generate a list of all the
+					games it can run, including details such as the full title, publisher
+					and release date.</strong>
+				</p>
+			</div>
+			<div class="panel-body">
+				<p>
+					By providing the path to the
+					<span class="label label-default">MAME Executable</span> on your
+					system, this list can generated and imported into the game database.
+					The information can then be used to automatically populate your active
+					game list with this information.
+				</p>
+				<p>
+					The optional <span class="label label-default">Platform</span> may be
+					used to set the platform associated with all games imported from MAME.
+				</p>
+				<p>
+					Use the <span class="label label-primary">Save</span> button to save
+					the MAME configuration details. The
+					<span class="label label-success">Import</span> button starts the
+					import process, which may take some considerable time as most MAME
+					versions support many thousands of individual games.
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
