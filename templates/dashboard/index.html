@@ -7,6 +7,51 @@
 {% block content_title %}Dashboard{% endblock %}
 
 {% block content %}
-<h2>We have {{ game_count }} games!</h2>
-<p>Total games in database: {{ data_count }}</p>
+<div class="row">
+	<div class="col-lg-6">
+		<div class="panel panel-success">
+			<div class="panel-heading text-center">
+				<h2>Active Games</h2>
+			</div>
+			<div class="panel-body text-center">
+				<h1>
+					<a href="{% url 'gamelist:index' %}game" class="label label-primary label-lg">{{ game_count }}</a>
+				</h1>
+			</div>
+			<div class="panel-body text-center">
+				<form action="{% url 'gamelist:index' %}game" method="get">
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="Search..." name="q" value="{{ search }}">
+						<span class="input-group-btn">
+						<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+						</span>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6">
+		<div class="panel panel-warning">
+			<div class="panel-heading text-center">
+				<h2>Games in Database</h2>
+			</div>
+			<div class="panel-body text-center">
+				<h1>
+					<a href="{% url 'gamelist:index' %}data" class="label label-primary label-lg">{{ data_count }}</a>
+				</h1>
+			</div>
+			<div class="panel-body text-center">
+				<form action="{% url 'gamelist:index' %}data" method="get">
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="Search..." name="q" value="{{ search }}">
+						<span class="input-group-btn">
+						<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+						</span>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
 {% endblock %}
