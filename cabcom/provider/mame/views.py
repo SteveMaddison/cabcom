@@ -16,5 +16,4 @@ class MameView(DetailView):
 		context = super(MameView, self).get_context_data(**kwargs)
 		context['title'] = 'MAME'
 		context['menu_active'] = 'data'
-		print context
 		return context
