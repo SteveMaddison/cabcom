@@ -7,7 +7,42 @@
 {% block content_title %}{{ title }}{% endblock %}
 
 {% block content %}
-{% if games %}
+{% if games or search %}
+	<div class="row">
+		<div class="col-lg-6">
+			<form action="{% url 'gamelist:index' %}{{ detail_type }}" method="get">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Search..." name="q" value="{{ search }}">
+					<span class="input-group-btn">
+					<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+					</span>
+				</div>
+			</form>
+		</div>
+		<div class="col-lg-3">
+			{% if search %}
+			<form action="{% url 'gamelist:index' %}{{ detail_type }}" method="get">
+				<div class="input-group">
+					<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-remove-circle"></span> Clear</button>
+				</div>
+			</form>
+			{% endif %}
+		</div>
+		<div class="col-lg-3">
+			<div class="btn-group pull-right">
+				<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+				Actions <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a href="#">Delete</a></li>
+					<li><a href="#">Populate</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<p></p>
+
 	<table class="table table-striped">
 		<thead>
 			<tr class="info">
@@ -70,5 +105,4 @@
 {% else %}
 	<p>No games yet</p>
 {% endif %}
-
 {% endblock %}
