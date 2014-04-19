@@ -1,11 +1,54 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}{{ title }}{% trans 'Cabcom Games' %}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block content_title %}MAME{% endblock %}
 
+
+{% block extrahead %}
+{% if not mame.idle %}
+<meta http-equiv="refresh" content="5">
+{% endif %}
+{% endblock %}
+
 {% block content %}
+{% if not mame.idle or mame.inventory > 0 %}
+<div class="row">
+	{% if mame.idle and mame.imported == mame.inventory %}
+	<div class="alert alert-success text-center">
+		<h3>{{ mame.imported }} games imported</h3>
+	</div>
+	{% else %}
+	<div class="alert alert-info text-center">
+		{% if mame.imported == 0 %}
+		<h3>Building game list...</h3>
+			{% if mame.inventory > 0 %}
+			<p>
+				{{ mame.inventory }} games found
+			</p>
+			{% endif %}
+		{% else %}
+		<h3>Importing...</h3>
+		<p>
+			Imported {{ mame.imported }} of {{ mame.inventory }} games
+		</p>
+		{% endif %}
+	</div>
+	{% endif %}
+</div>
+{% endif %}
+
+{% if not mame.idle %}
+<div class="row">
+	<div class="progress progress-striped active">
+		<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ mame.imported }}"
+			aria-valuemin="0" aria-valuemax="{{ mame.inventory }}" style="width: {{ imported_percent }}%;">
+			<span class="sr-only">{{ mame.imported }}/{{ mame.inventory }}</span>
+		</div>
+	</div>
+</div>
+{% endif %}
 
 <div class="row">
 	<div class="col-md-6">
@@ -35,7 +78,7 @@
 				</table>
 			</div>
 			<div>
-				<button type="submit" class="btn btn-lg btn-success"><span class="glyphicon glyphicon-download-alt"></span> Import</button>
+				<button type="submit" class="btn btn-lg btn-success {% if not mame.idle %}disabled{% endif %}"><span class="glyphicon glyphicon-download-alt"></span> Import</button>
 			</div>
 		</form>
 	</div>

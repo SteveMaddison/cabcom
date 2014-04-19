@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 from celery import shared_task
 import os
+from tempfile import mkstemp
 import subprocess
 from datetime import datetime
 from xml.etree.ElementTree import iterparse
@@ -13,26 +14,40 @@ def import_xml(self):
 	if not self:
 		raise ProviderException('No MAME provider configured')
 
-	if self.xml_file:
-		if not os.path.exists(self.xml_file):
-			if not self.executable:
-				raise ProviderException('Executable not set.')
+	if not self.executable:
+		raise ProviderException('Executable not set.')
 
-			if not os.path.exists(self.executable):
-				raise ProviderException('No such file or directory.')
+	if not os.path.exists(self.executable):
+		raise ProviderException('No such file or directory.')
 
-			# Run MAME to get the game list XML.
-			f = open(self.xml_file, 'w')
-			f.write(subprocess.check_output([self.executable, '-listxml']))
-			f.close()
+	# Run MAME to get the game list XML into a temporary file.
+	f, xml_file = mkstemp()
+	os.write(f, subprocess.check_output([self.executable, '-listxml']))
+	os.close(f)
 
 	# As the data can always be restored by re-running the import,
 	# it's easiest just to throw all records away and start again.
 	self.clear()
 
 	# Set up an interative XML parser so we can discard processed
-	# items when we're done.
-	context = iterparse(self.xml_file, events=('start', 'end'))
+	# items when we're going.
+	context = iterparse(xml_file, events=('start', 'end'))
+	context = iter(context)
+	event, root = context.next()
+
+	# First, count the items without processing, so we can follow
+	# progress later.
+	for event, element in context:
+		if event == 'end' and element.tag == 'game':
+			self.inventory += 1
+			if self.inventory % 100 == 0:
+				self.save()
+			root.clear()
+	# Save the exact number.
+	self.save()
+
+	# This time really import the games.
+	context = iterparse(xml_file, events=('start', 'end'))
 	context = iter(context)
 	event, root = context.next()
 
@@ -87,6 +102,16 @@ def import_xml(self):
 			root.clear()
 			added += 1
 
+			# Update the running total, but not too often.
+			if added % 100 == 0:
+				self.imported = added
+				self.save()
+
+	# Updte with the exact number imported.
+	self.imported = added
+	self.idle = True
+	self.save()
+
+	os.remove(xml_file)
+
 	return added
-
-

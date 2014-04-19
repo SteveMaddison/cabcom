@@ -10,7 +10,7 @@ class MameView(DetailView):
 	template_name = 'provider/mame/detail.html'
 
 	def get_object(self):
-		object, created = Mame.objects.get_or_create(id=1)
+		object, created = Mame.objects.get_or_create()
 
 		if created:
 			object.name = 'MAME'
@@ -23,28 +23,37 @@ class MameView(DetailView):
 	def post(self, request, *args, **kwargs):
 		mame = self.get_object()
 
-		if 'executable' in self.request.POST:
-			executable = self.request.POST['executable']
-			if executable:
-				mame.executable = executable
-			else:
-				mame.executable = self.find_mame_executable()
+		if mame.idle:
+			if 'executable' in self.request.POST:
+				executable = self.request.POST['executable']
+				if executable:
+					mame.executable = executable
+				else:
+					mame.executable = self.find_mame_executable()
 
-		if 'platform' in self.request.POST:
-			platform = Platform.objects.get(id = self.request.POST['platform'])
-			if platform:
-				mame.platform = platform
+			if 'platform' in self.request.POST:
+				platform = Platform.objects.get(id = self.request.POST['platform'])
+				if platform:
+					mame.platform = platform
 
-		mame.save()
-		mame.refresh()
+			mame.inventory = 0
+			mame.imported = 0
+			mame.save()
+			mame.refresh()
 
 		return self.get(self, request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):
+		mame = self.get_object()
+
 		context = super(MameView, self).get_context_data(**kwargs)
 		context['title'] = 'MAME'
 		context['menu_active'] = 'data'
 		context['platforms'] = Platform.objects.all().order_by('name')
+
+		if mame.inventory > 0:
+			context['imported_percent'] = int(float(mame.imported) / float(mame.inventory) * 100)
+
 		return context
 
 	def find_mame_executable(self):
