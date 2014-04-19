@@ -9,29 +9,35 @@
 
 <div class="row">
 	<div class="col-md-6">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<h4>Configuration</h4>
+		<form action="{% url 'provider:mame' %}" method="post">
+			{% csrf_token %}
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h4>Configuration</h4>
+				</div>
+				<table class="table">
+					<tr>
+						<th>MAME Executable</th>
+						<td><input type="text" class="form-control" name="executable" value="{{ object.executable }}"></input></td>
+					</tr>
+					<tr>
+						<th>Platform</th>
+						<td>
+							<select name="platform" class="form-control">
+								{% for platform in platforms %}
+								<option value="{{ platform.id }}" {% if platform.id == mame.platform.id %}selected="selected"{% endif %}>
+									{{ platform.name }}
+								</option>
+								{% endfor %}
+							</select>
+						</td>
+					</tr>
+				</table>
 			</div>
-			<table class="table">
-				<tr>
-					<th>MAME Executable</th>
-					<td>{{ object.executable }}</td>
-				</tr>
-				<tr>
-					<th>XML File</th>
-					<td>{{ mame.xml_file }}</td>
-				</tr>
-				<tr>
-					<th>Platform</th>
-					<td>{{ mame.platform }}</td>
-				</tr>
-			</table>
-		</div>
-		<div>
-			<button type="button" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
-			<button type="button" class="btn btn-lg btn-success"><span class="glyphicon glyphicon-download-alt"></span> Import</button>
-		</div>
+			<div>
+				<button type="submit" class="btn btn-lg btn-success"><span class="glyphicon glyphicon-download-alt"></span> Import</button>
+			</div>
+		</form>
 	</div>
 	<div class="col-md-6">
 		<div class="panel panel-info">
@@ -46,7 +52,7 @@
 				<p>
 					By providing the path to the
 					<span class="label label-default">MAME Executable</span> on your
-					system, this list can generated and imported into the game database.
+					system, this list can be generated and imported into the game database.
 					The information can then be used to automatically populate your active
 					game list with this information.
 				</p>
@@ -55,9 +61,7 @@
 					used to set the platform associated with all games imported from MAME.
 				</p>
 				<p>
-					Use the <span class="label label-primary">Save</span> button to save
-					the MAME configuration details. The
-					<span class="label label-success">Import</span> button starts the
+					The <span class="label label-success">Import</span> button starts the
 					import process, which may take some considerable time as most MAME
 					versions support many thousands of individual games.
 				</p>

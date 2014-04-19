@@ -19,6 +19,7 @@ class cabcom (
         'python',
         'python-pip',
         'python-yaml',
+	'rabbitmq-server',
         'sqlite3',
         'vim',
       ]
@@ -30,7 +31,7 @@ class cabcom (
 
   package { $packages: }
 
-  package { 'django':
+  package { ['django','celery','django-celery']:
     provider => 'pip',
     require  => Package['python-pip'],
   }
