@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content_title %}Cabrio{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-6">
+		<form action="{% url 'frontend:cabrio' %}" method="post">
+			{% csrf_token %}
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h4>General</h4>
+				</div>
+				<table class="table">
+					<tr>
+						<th>Config Directory</th>
+						<td><input type="text" class="form-control" name="config_dir" value="{{ object.config_dir }}"></input></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h4>Interface</h4>
+				</div>
+				<table class="table">
+					<tr>
+						<th>Fullscreen Mode</th>
+						<td><input type="checkbox" class="form-control" name="fullscreen" {% if object.fullscreen %}checked="checked"{% endif %}></input></td>
+					</tr>
+					<tr>
+						<th>Frame Rate</th>
+						<td><input type="text" class="form-control" name="framerate" value="{{ object.framerate }}"></input></td>
+					</tr>
+					<tr>
+						<th>Theme</th>
+						<td>
+							<select name="theme" class="form-control">
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>Screen Width</th>
+						<td><input type="text" class="form-control" name="screen_width" value="{{ object.screen_width }}"></input></td>
+					</tr>
+					<tr>
+						<th>Screen Height</th>
+						<td><input type="text" class="form-control" name="screen_height" value="{{ object.screen_height }}"></input></td>
+					</tr>
+					<tr>
+						<th>Rotation</th>
+						<td>
+							<select name="rotation" class="form-control">
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>Graphics Quality</th>
+						<td>
+							<select name="gfx_quality" class="form-control">
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>Max Image Width</th>
+						<td><input type="text" class="form-control" name="max_image_width" value="{{ object.max_image_width }}"></input></td>
+					</tr>
+					<tr>
+						<th>Max Image Height</th>
+						<td><input type="text" class="form-control" name="max_image_height" value="{{ object.max_image_height }}"></input></td>
+					</tr>
+				</table>
+			</div>
+			<div>
+				<button type="submit" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
+			</div>
+		</form>
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-info">
+			<div class="panel-heading text-center">
+				<img src="/static/images/frontend/cabrio.png" width="400" height="120"/>
+			</div>
+			<div class="panel-body">
+				<p>
+				<a href="http://www.cabrio-fe.org/">Cabrio</a> is a graphical front end
+				for emulators, specifically designed for use in arcade cabinets. It allows
+				you to select games via an intuitive, attractive interface which is easy
+				to use with limited controls, such as a joystick.
+				</p><p>
+				Cabrio is made available under the GNU General Public License, meaning
+				anyone can freely download the source code and even contribute to development.
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
