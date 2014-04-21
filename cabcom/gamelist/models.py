@@ -101,3 +101,4 @@ class Filter(models.Model):
 			platform_criteria,
 			provider_criteria,
 		)
+

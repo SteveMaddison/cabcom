@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from cabcom.gamelist.views import IndexView, GameListView, DataListView, GameDetailView, DataDetailView
+from cabcom.gamelist.views import IndexView, GameListView, DataListView, GameDetailView, DataDetailView, GameImportView
 
 urlpatterns = patterns('',
 	url(r'^$', IndexView, name='index'),
@@ -7,4 +7,5 @@ urlpatterns = patterns('',
 	url(r'^data/(?P<pk>\d+)/$', DataDetailView.as_view(), name='data-detail'),
 	url(r'^game/$', GameListView.as_view(), name='game'),
 	url(r'^game/(?P<pk>\d+)/$', GameDetailView.as_view(), name='game-detail'),
+    url(r'^import/$', GameImportView.as_view(), name='import'),
 )

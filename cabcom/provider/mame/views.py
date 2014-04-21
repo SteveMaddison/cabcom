@@ -31,9 +31,10 @@ class MameView(DetailView):
 				else:
 					mame.executable = self.find_mame_executable()
 
-			if 'platform' in self.request.POST:
-				platform = Platform.objects.get(id = self.request.POST['platform'])
-				if platform:
+			if 'platform_name' in self.request.POST:
+				platform_name = self.request.POST['platform_name']
+				if platform_name:
+					platform, created = Platform.objects.get_or_create(name = platform_name)
 					mame.platform = platform
 
 			mame.inventory = 0

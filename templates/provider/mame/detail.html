@@ -66,19 +66,23 @@
 					<tr>
 						<th>Platform</th>
 						<td>
-							<select name="platform" class="form-control">
-								{% for platform in platforms %}
-								<option value="{{ platform.id }}" {% if platform.id == mame.platform.id %}selected="selected"{% endif %}>
-									{{ platform.name }}
-								</option>
-								{% endfor %}
-							</select>
+							<div class="input-group">
+								<input type="text" id="platform_name" name="platform_name" class="form-control">
+								<div class="input-group-btn">
+									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+									<ul class="dropdown-menu pull-right">
+									{% for platform in platforms %}
+										<li><a href="#" onclick="document.getElementById('platform_name').value = '{{ platform.name }}';">{{ platform.name }}</a></li>
+									{% endfor %}
+									</ul>
+								</div>
+							</div>
 						</td>
 					</tr>
 				</table>
-			</div>
-			<div>
-				<button type="submit" class="btn btn-lg btn-success {% if not mame.idle %}disabled{% endif %}"><span class="glyphicon glyphicon-download-alt"></span> Import</button>
+				<div class="panel-body">
+					<button type="submit" class="btn btn-lg btn-success {% if not mame.idle %}disabled{% endif %}"><span class="glyphicon glyphicon-download-alt"></span> Import</button>
+				</div>
 			</div>
 		</form>
 	</div>

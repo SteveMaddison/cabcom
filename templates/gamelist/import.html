@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content_title %}
+Import Games
+{% endblock %}
+
+{% if imported or need_confirmation %}
+<div class="row">
+	{% if imported %}
+	<div class="alert alert-success text-center">
+		<h3>{{ imported }} games imported</h3>
+	</div>
+	{% endif %}
+	{% if need_confirmation %}
+	<div class="alert alert-warning text-center">
+		<h3>Deleting this location will remove all associated games from the game list.</h3>
+		<p>You will be able to import them again, but any custom changes will be lost.</p>
+		</h4>Really delete?</h4>
+		<div class="button-group">
+			<form method="post" action="{% url 'gamelist:import' %}">
+				{% csrf_token %}
+				<input type="hidden" name="id" value="{{ provider_id }}"/>
+				<input type="hidden" name="confirm" value="true"/>
+				<button type="submit" name="delete" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-ok"></span> Sure, delete them all!</button>
+			</form>
+			<form method="get" action="{% url 'gamelist:import' %}">
+				<button type="submit" name="delete" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-remove"></span> No way!</button>
+			</form>
+		</div>
+	</div>
+	{% endif %}
+</div>
+{% endif %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-6">
+		{% if dirs %}
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h4>Locations</h4>
+			</div>
+			<ul class="list-group">
+				{% for dir in dirs %}
+				<li class="list-group-item">
+					<form method="post" action="{% url 'gamelist:import' %}">
+						{% csrf_token %}
+						<input type="hidden" name="id" value="{{ dir.id }}"/>
+						<h4>
+						{{ dir.name }} <span class="label label-default">{{ dir.path }}</span>
+						<div class="button-group pull-right">
+							<button type="submit" name="refresh" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
+							<button type="submit" name="delete" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+						</div>
+						</h4>
+					</form>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h4>Add Location</h4>
+			</div>
+			<form method="post" action="{% url 'gamelist:import' %}">
+			{% csrf_token %}
+			<table class="table">
+				<tr>
+					<th>Name</th>
+					<td><input type="text" class="form-control" name="name"></input></td>
+				</tr>
+				<tr>
+					<th>Directory</th>
+					<td><input type="text" class="form-control" name="path"></input></td>
+				</tr>
+				<tr>
+					<th>Platform</th>
+					<td>
+						<div class="input-group">
+							<input type="text" id="platform_name" name="platform_name" class="form-control">
+							<div class="input-group-btn">
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+								<ul class="dropdown-menu pull-right">
+									{% for platform in platforms %}
+									<li><a href="#" onclick="document.getElementById('platform_name').value = '{{ platform.name }}';">{{ platform.name }}</a></li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<div class="panel-body">
+				<button type="submit" name="add" class="btn btn-lg btn-success "><span class="glyphicon glyphicon-download-alt"></span> Import</button>
+			</div>
+			</form>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h4>Importing Games</h4>
+			</div>
+			<div class="panel-body">
+				<p>
+				Add locations here to import files into the active game list.
+				</p><p>
+				Give your location a <span class="label label-default">Name</span> so you can identify 
+				it easily and the <span class="label label-default">Directory</span> which contains your games.
+				If you select a <span class="label label-default">Platform</span> all games imported from
+				the directory will be tagged with this platform.
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
