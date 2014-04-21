@@ -112,6 +112,6 @@ def import_xml(self):
 	self.idle = True
 	self.save()
 
-	os.remove(xml_file)
+	os.unlink(xml_file)
 
 	return added

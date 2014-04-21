@@ -52,22 +52,22 @@ class Game(GameData):
 		# TODO: handle multiple matches.
 		data = Data.objects.filter(name = self.name).first()
 		if data:
-			if replace or not self.display_name:
+			if (replace or not self.display_name) and data.display_name:
 				self.display_name = data.display_name
 				updated = True
-			if replace or not self.genre:
+			if (replace or not self.genre) and data.genre:
 				self.genre = data.genre
 				updated = True
-			if replace or not self.publisher:
+			if (replace or not self.publisher) and data.publisher:
 				self.publisher = data.publisher
 				updated = True
-			if replace or not self.release_date:
+			if (replace or not self.release_date) and data.release_date:
 				self.release_date = data.release_date
 				updated = True
-			if replace or not self.platform:
+			if (replace or not self.platform) and data.platform:
 				self.platform = data.platform
 				updated = True
-			if replace or not self.control_types.all():
+			if (replace or not self.control_types.all()) and data.control_types.all():
 				self.control_types.all().delete()
 				for control_type in data.control_types.all():
 					self.control_types.add(control_type)

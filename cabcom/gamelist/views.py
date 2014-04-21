@@ -1,4 +1,5 @@
 from django.http import Http404, HttpRequest
+from django.core.urlresolvers import reverse_lazy
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import RedirectView
 from django.shortcuts import render, get_object_or_404
@@ -6,11 +7,11 @@ from cabcom.gamelist.models import Game, Data, Platform
 from cabcom.provider.directory.models import Directory
 
 class IndexView(RedirectView):
-	permanent = True
+	permanent = False
 	query_string = True
 
 	def get_redirect_url(self):
-		return reverse('game')
+		return reverse_lazy('gamelist:game')
 
 class GameListView(ListView):
 	template_name = 'gamelist/index.html'
@@ -85,8 +86,6 @@ class GameImportView(ListView):
 		return Directory.objects.filter(resource_type = 'g').order_by('name')
 
 	def get_context_data(self, **kwargs):
-		if 'id' in self.request.GET:
-			print "YOYOYO"
 		context = super(GameImportView, self).get_context_data(**kwargs)
 		context['menu_active'] = 'game'
 		context['platforms'] = Platform.objects.all().order_by('name')
@@ -133,4 +132,14 @@ class GameImportView(ListView):
 					Game.objects.filter(provider = provider).update(platform = platform)
 
 		return self.get(self, request, *args, **kwargs)
+
+class GamePopulateView(RedirectView):
+	permanent = False
+	query_string = True
+
+	def get_redirect_url(self):
+		for game in Game.objects.all():
+			game.populate()
+
+		return reverse_lazy('gamelist:game')
 
