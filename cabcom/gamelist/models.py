@@ -46,6 +46,11 @@ class Data(GameData):
 	pass
 
 class Game(GameData):
+	title_provider = models.ForeignKey('provider.Provider', related_name='title', blank = True, null = True)
+	screenshot_provider = models.ForeignKey('provider.Provider', related_name='screenshot', blank = True, null = True)
+	background_provider = models.ForeignKey('provider.Provider', related_name='background', blank = True, null = True)
+	video_provider = models.ForeignKey('provider.Provider', related_name='video', blank = True, null = True)
+
 	def populate(self, replace = True):
 		updated = False
 
@@ -67,12 +72,18 @@ class Game(GameData):
 			if (replace or not self.platform) and data.platform:
 				self.platform = data.platform
 				updated = True
-			if (replace or not self.control_types.all()) and data.control_types.all():
+			if (replace or not self.control_types.exists()) and data.control_types.exists():
 				self.control_types.all().delete()
 				for control_type in data.control_types.all():
 					self.control_types.add(control_type)
 				updated = True
 
+		# TODO: fix this and abstract for different provider types
+		#for title_provider in providers.filter(resource_type = 't'):
+		#	if title_provider.match(self.name):
+		#		self.title_provider = title_provider
+
+		if updated:
 			self.save()
 
 		return updated

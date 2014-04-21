@@ -52,7 +52,9 @@
 				<th>Platform</th>
 				<th>Publisher</th>
 				<th>Release Date</th>
+				{% if detail_type == 'game' %}
 				<th>Media</th>
+				{% endif %}
 			</tr>
 		</thead>
 		<tbody>
@@ -72,12 +74,14 @@
 				<td>{{ game.platform }}</td>
 				<td>{{ game.publisher }}</td>
 				<td>{{ game.release_date }}</td>
+				{% if detail_type == 'game' %}
 				<td>
-					<span class="label label-success"><span class="glyphicon glyphicon-tag"></span></span>
-					<span class="label label-success"><span class="glyphicon glyphicon-camera"></span></span>
-					<span class="label label-success"><span class="glyphicon glyphicon-picture"></span></span>
-					<span class="label label-success"><span class="glyphicon glyphicon-film"></span></span>
+					<span class="label {% if game.title_provider %}label-success{% else %}label-default{% endif %}"><span class="glyphicon glyphicon-tag"></span></span>
+					<span class="label {% if game.screenshot_provider %}label-success{% else %}label-default{% endif %}"><span class="glyphicon glyphicon-camera"></span></span>
+					<span class="label {% if game.background_provider %}label-success{% else %}label-default{% endif %}"><span class="glyphicon glyphicon-picture"></span></span>
+					<span class="label {% if game.video_provider %}label-success{% else %}label-default{% endif %}"><span class="glyphicon glyphicon-film"></span></span>
 				</td>
+				{% endif %}
 			</tr>
 			{% endfor %}
 		</tbody>

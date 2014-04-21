@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content_title %}
+Media Locations
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<ul class="nav nav-tabs">
+		<li {% if title == 'Titles' %}class="active"{% endif %}><a href="{% url 'provider:title' %}">Titles</a></li>
+		<li {% if title == 'Screenshots' %}class="active"{% endif %}><a href="{% url 'provider:screenshot' %}">Screenshots</a></li>
+		<li {% if title == 'Backgrounds' %}class="active"{% endif %}><a href="{% url 'provider:background' %}">Backgrounds</a></li>
+		<li {% if title == 'Videos' %}class="active"{% endif %}><a href="{% url 'provider:video' %}">Videos</a></li>
+	</ul>
+</div>
+<p></p>
+<div class="row">
+	<div class="col-md-6">
+		{% if providers %}
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h4>Locations</h4>
+			</div>
+			<ul class="list-group">
+				{% for provider in providers %}
+				<li class="list-group-item">
+					<form method="post" action="">
+						{% csrf_token %}
+						<input type="hidden" name="id" value="{{ provider.id }}"/>
+						<h4>
+						{{ provider.name }} <span class="label label-default">{{ provider.path }}</span>
+						<div class="button-group pull-right">
+							<button type="submit" name="delete" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+						</div>
+						</h4>
+					</form>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h4>Add Location</h4>
+			</div>
+			<form method="post" action="">
+			{% csrf_token %}
+			<table class="table">
+				<tr>
+					<th>Name</th>
+					<td><input type="text" class="form-control" name="name"></input></td>
+				</tr>
+				<tr>
+					<th>Directory</th>
+					<td><input type="text" class="form-control" name="path"></input></td>
+				</tr>
+			</table>
+			<div class="panel-body">
+				<button type="submit" name="add" class="btn btn-lg btn-success "><span class="glyphicon glyphicon-plus-sign"></span> Add</button>
+			</div>
+			</form>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h4>Media Locations</h4>
+			</div>
+			<div class="panel-body">
+				<p>
+				Add media locations to automatically match images and videos to your games,
+				for use in a front end.
+				</p><p>
+				Give your location a <span class="label label-default">Name</span> so you can identify 
+				it easily and the <span class="label label-default">Directory</span> which contains your files.
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

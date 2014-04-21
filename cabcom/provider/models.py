@@ -1,14 +1,16 @@
 from django.db import models
 
 RESOURCE_TYPES = (
-	('g', 'Games'),
-	('i', 'Images'),
-	('v', 'Videos'),
+	('b', 'Backgrounds'),
 	('d', 'Data'),
+	('g', 'Games'),
+	('s', 'Screenshots'),
+	('t', 'Titles'),
+	('v', 'Videos'),
 )
 
 class Provider(models.Model):
-	name = models.CharField(max_length=50, unique=True)
+	name = models.CharField(max_length=50)
 	resource_type = models.CharField(max_length=1, choices=RESOURCE_TYPES)
 
 	def __unicode__(self):

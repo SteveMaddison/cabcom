@@ -48,10 +48,10 @@
           <li class="dropdown{% if menu_active == 'resources' %} active{% endif %}">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Media <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="#"><span class="glyphicon glyphicon-tag"></span> Titles</a></li>
-              <li><a href="#"><span class="glyphicon glyphicon-camera"></span> Screenshots</a></li>
-              <li><a href="#"><span class="glyphicon glyphicon-picture"></span> Backgrounds</a></li>
-              <li><a href="#"><span class="glyphicon glyphicon-film"></span> Videos</a></li>
+              <li><a href="{% url 'provider:title' %}"><span class="glyphicon glyphicon-tag"></span> Titles</a></li>
+              <li><a href="{% url 'provider:screenshot' %}"><span class="glyphicon glyphicon-camera"></span> Screenshots</a></li>
+              <li><a href="{% url 'provider:background' %}"><span class="glyphicon glyphicon-picture"></span> Backgrounds</a></li>
+              <li><a href="{% url 'provider:video' %}"><span class="glyphicon glyphicon-film"></span> Videos</a></li>
             </ul>
           </li>
           <li class="dropdown{% if menu_active == 'frontend' %} active{% endif %}">

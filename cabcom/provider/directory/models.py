@@ -1,6 +1,6 @@
 from django.db import models
 from cabcom.provider.models import Provider, ProviderException
-from cabcom.gamelist.models import Game, Platform
+from cabcom.gamelist.models import Game
 from os.path import splitext
 import os
 
