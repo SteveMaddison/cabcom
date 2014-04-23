@@ -37,12 +37,13 @@ class Directory(Provider):
 
 		if extension:
 			self.check()
-			if os.path.isfile(os.path.join(self.path, pattern)):
-				results.append(pattern)
+			match = os.path.join(self.path, pattern)
+			if os.path.isfile(match):
+				results.append(match)
 		else:
 			for f in self.list():
 				if f.startswith(pattern):
-					results.append(f)
+					results.append(os.path.join(self.path,f))
 
 		return results
 

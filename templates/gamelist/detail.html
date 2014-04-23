@@ -50,5 +50,45 @@
 			</table>
 		</div>
 	</div>
+
+	{% if detail_type == 'game' %}
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h4>Media Files</h4>
+			</div>
+			<table class="table">
+				<tr>
+					<th>
+						<span class="label {% if title_file %}label-success{% else %}label-default{% endif %}"><span class="glyphicon glyphicon-tag"></span></span>
+						Title
+					</th>
+					<td>{{ title_file }}</td>
+				</tr>
+				<tr>
+					<th>
+						<span class="label {% if screenshot_file %}label-success{% else %}label-default{% endif %}"><span class="glyphicon glyphicon-camera"></span></span>
+						Screenshot
+					</th>
+					<td>{{ screenshot_file }}</td>
+				</tr>
+				<tr>
+					<th>
+						<span class="label {% if background_file %}label-success{% else %}label-default{% endif %}"><span class="glyphicon glyphicon-picture"></span></span>
+						Background
+					</th>
+					<td>{{ background_file }}</td>
+				</tr>
+				<tr>
+					<th>
+						<span class="label {% if video_file %}label-success{% else %}label-default{% endif %}"><span class="glyphicon glyphicon-film"></span></span>
+						Video
+					</th>
+					<td>{{ video_file }}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	{% endif %}
 </div>
 {% endblock %}

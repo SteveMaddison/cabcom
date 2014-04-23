@@ -63,10 +63,26 @@ class GameDetailView(DetailView):
 	context_object_name = 'game'
 	template_name = 'gamelist/detail.html'
 
+	def get_media(self, provider):
+		if provider:
+			dir = Directory.objects.get(id = provider.id)
+			if dir:
+				files = dir.match(self.object.name)
+				if files:
+					return files[0]
+
+		return None
+
 	def get_context_data(self, **kwargs):
 		context = super(GameDetailView, self).get_context_data(**kwargs)
 		context['title'] = 'Game List'
+		context['detail_type'] = 'game'
 		context['menu_active'] = 'game'
+		context['title_file']      = self.get_media(self.object.title_provider)
+		context['screenshot_file'] = self.get_media(self.object.screenshot_provider)
+		context['background_file'] = self.get_media(self.object.background_provider)
+		context['video_file']      = self.get_media(self.object.video_provider)
+
 		return context
 
 class DataDetailView(GameDetailView):
@@ -75,6 +91,7 @@ class DataDetailView(GameDetailView):
 	def get_context_data(self, **kwargs):
 		context = super(DataDetailView, self).get_context_data(**kwargs)
 		context['title'] = 'Game Database'
+		context['detail_type'] = 'data'
 		context['menu_active'] = 'data'
 		return context
 
