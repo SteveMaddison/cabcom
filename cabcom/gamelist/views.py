@@ -141,5 +141,30 @@ class GamePopulateView(RedirectView):
 		for game in Game.objects.all():
 			game.populate()
 
+			# TODO: fix this and abstract for different provider types
+			if not game.title_provider:
+				for title_provider in Directory.objects.filter(resource_type = 't'):
+					if title_provider.match(game.name):
+						game.title_provider = title_provider
+						game.save()
+
+			if not game.screenshot_provider:
+				for screenshot_provider in Directory.objects.filter(resource_type = 's'):
+					if screenshot_provider.match(game.name):
+						game.screenshot_provider = screenshot_provider
+						game.save()
+
+			if not game.background_provider:
+				for background_provider in Directory.objects.filter(resource_type = 'b'):
+					if background_provider.match(game.name):
+						game.background_provider = background_provider
+						game.save()
+
+			if not game.video_provider:
+				for video_provider in Directory.objects.filter(resource_type = 'v'):
+					if video_provider.match(game.name):
+						game.video_provider = video_provider
+						game.save()
+
 		return reverse_lazy('gamelist:game')
 

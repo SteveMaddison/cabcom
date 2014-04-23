@@ -78,11 +78,6 @@ class Game(GameData):
 					self.control_types.add(control_type)
 				updated = True
 
-		# TODO: fix this and abstract for different provider types
-		#for title_provider in providers.filter(resource_type = 't'):
-		#	if title_provider.match(self.name):
-		#		self.title_provider = title_provider
-
 		if updated:
 			self.save()
 
