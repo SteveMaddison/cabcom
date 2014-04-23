@@ -6,20 +6,34 @@
 {% block content_title %}Cabrio{% endblock %}
 
 {% block content %}
+{% if form.errors %}
+<div class="row">
+	<div class="alert alert-critical text-center">
+		{% for field in form %}
+			{% if field.errors %}
+				{{ field.label_tag }} {{ field.errors }}
+			{% endif %}
+		{% endfor %}
+	</div>
+</div>
+{% endif %}
 <div class="row">
 	<div class="col-md-6">
 		<form action="{% url 'frontend:cabrio' %}" method="post">
 			{% csrf_token %}
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<h4>General</h4>
+					<h4>Configuration</h4>
 				</div>
 				<table class="table">
 					<tr>
-						<th>Config Directory</th>
-						<td><input type="text" class="form-control" name="config_dir" value="{{ object.config_dir }}"></input></td>
+						<th>Target Directory</th>
+						<td><input type="text" class="form-control" name="config_dir" value="{{ form.config_dir.value }}"></input></td>
 					</tr>
 				</table>
+				<div class="panel-body">
+					<button type="submit" name="generate" class="btn btn-lg btn-success"><span class="glyphicon glyphicon-share"></span> Generate</button>
+				</div>
 			</div>
 
 			<div class="panel panel-primary">
@@ -29,11 +43,11 @@
 				<table class="table">
 					<tr>
 						<th>Fullscreen Mode</th>
-						<td><input type="checkbox" class="form-control" name="fullscreen" {% if object.fullscreen %}checked="checked"{% endif %}></input></td>
+						<td><input type="checkbox" class="form-control" name="fullscreen" {% if form.fullscreen.value %}checked="checked"{% endif %}></input></td>
 					</tr>
 					<tr>
 						<th>Frame Rate</th>
-						<td><input type="text" class="form-control" name="framerate" value="{{ object.framerate }}"></input></td>
+						<td><input type="text" class="form-control" name="framerate" value="{{ form.framerate.value }}"></input></td>
 					</tr>
 					<tr>
 						<th>Theme</th>
@@ -44,16 +58,19 @@
 					</tr>
 					<tr>
 						<th>Screen Width</th>
-						<td><input type="text" class="form-control" name="screen_width" value="{{ object.screen_width }}"></input></td>
+						<td><input type="text" class="form-control" name="screen_width" value="{{ form.screen_width.value }}"></input></td>
 					</tr>
 					<tr>
 						<th>Screen Height</th>
-						<td><input type="text" class="form-control" name="screen_height" value="{{ object.screen_height }}"></input></td>
+						<td><input type="text" class="form-control" name="screen_height" value="{{ form.screen_height.value }}"></input></td>
 					</tr>
 					<tr>
 						<th>Rotation</th>
 						<td>
 							<select name="rotation" class="form-control">
+							{% for value, name in form.fields.rotation.choices %}
+								<option value="{{ value }}" {% if value == form.rotation.value %}selected="selected"{% endif %}>{{ name }}</option>
+							{% endfor %}
 							</select>
 						</td>
 					</tr>
@@ -61,21 +78,24 @@
 						<th>Graphics Quality</th>
 						<td>
 							<select name="gfx_quality" class="form-control">
+							{% for value, name in form.fields.gfx_quality.choices %}
+								<option value="{{ value }}" {% if value == form.gfx_quality.value %}selected="selected"{% endif %}>{{ name }}</option>
+							{% endfor %}
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<th>Max Image Width</th>
-						<td><input type="text" class="form-control" name="max_image_width" value="{{ object.max_image_width }}"></input></td>
+						<td><input type="text" class="form-control" name="max_image_width" value="{{ form.max_image_width.value }}"></input></td>
 					</tr>
 					<tr>
 						<th>Max Image Height</th>
-						<td><input type="text" class="form-control" name="max_image_height" value="{{ object.max_image_height }}"></input></td>
+						<td><input type="text" class="form-control" name="max_image_height" value="{{ form.max_image_height.value }}"></input></td>
 					</tr>
 				</table>
-			</div>
-			<div>
-				<button type="submit" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
+				<div class="panel-body">
+					<button type="submit" name="save" class="btn btn-lg btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
+				</div>
 			</div>
 		</form>
 	</div>

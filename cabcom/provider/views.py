@@ -2,8 +2,6 @@ from django.http import Http404, HttpRequest
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.base import RedirectView
-#from django.shortcuts import render, get_object_or_404
-#from cabcom.gamelist.models import Game, Data, Platform
 from cabcom.provider.directory.models import Directory
 
 
@@ -26,8 +24,6 @@ class MediaIndexView(ListView):
 		context = super(MediaIndexView, self).get_context_data(**kwargs)
 		context['menu_active'] = 'media'
 
-		print self.resource_type
-		
 		if self.resource_type == 'b':
 			context['title'] = 'Backgrounds'
 		elif self.resource_type == 's':
