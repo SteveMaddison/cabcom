@@ -1,3 +1,8 @@
 body {
   padding: 40px;
 }
+
+.form-error {
+  background-color: #ffbbbb;
+}
+

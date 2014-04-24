@@ -1,0 +1,17 @@
+---
+- model: cabrio.theme
+  pk: 1
+  fields:
+    name: carousel
+- model: cabrio.theme
+  pk: 2
+  fields:
+    name: ice
+- model: cabrio.theme
+  pk: 3
+  fields:
+    name: industrial
+- model: cabrio.theme
+  pk: 4
+  fields:
+    name: wood

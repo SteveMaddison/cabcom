@@ -8,12 +8,15 @@
 {% block content %}
 {% if form.errors %}
 <div class="row">
-	<div class="alert alert-critical text-center">
+	<div class="alert alert-danger">
+		<h4>Error</h4>
+		<ul>
 		{% for field in form %}
 			{% if field.errors %}
-				{{ field.label_tag }} {{ field.errors }}
+			<li>{{ field.label }}: {{ field.errors|striptags }}</li>
 			{% endif %}
 		{% endfor %}
+		</ul>
 	</div>
 </div>
 {% endif %}
@@ -28,11 +31,11 @@
 				<table class="table">
 					<tr>
 						<th>Target Directory</th>
-						<td><input type="text" class="form-control" name="config_dir" value="{{ form.config_dir.value }}"></input></td>
+						<td><input type="text" class="form-control {% if form.config_dir.errors %}form-error{% endif %}" name="config_dir" value="{{ form.config_dir.value }}"></input></td>
 					</tr>
 				</table>
 				<div class="panel-body">
-					<button type="submit" name="generate" class="btn btn-lg btn-success"><span class="glyphicon glyphicon-share"></span> Generate</button>
+					<button type="submit" name="generate" class="btn btn-lg btn-success"><span class="glyphicon glyphicon-wrench"></span> Generate</button>
 				</div>
 			</div>
 
@@ -47,22 +50,25 @@
 					</tr>
 					<tr>
 						<th>Frame Rate</th>
-						<td><input type="text" class="form-control" name="framerate" value="{{ form.framerate.value }}"></input></td>
+						<td><input type="text" class="form-control {% if form.framerate.errors %}form-error{% endif %}" name="framerate" value="{{ form.framerate.value }}"></input></td>
 					</tr>
 					<tr>
 						<th>Theme</th>
 						<td>
 							<select name="theme" class="form-control">
+							{% for value, name in form.fields.theme.choices %}
+								<option value="{{ value }}" {% if value == form.theme.value|add:0 %}selected="selected"{% endif %}>{{ name }}</option>
+							{% endfor %}
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<th>Screen Width</th>
-						<td><input type="text" class="form-control" name="screen_width" value="{{ form.screen_width.value }}"></input></td>
+						<td><input type="text" class="form-control {% if form.screen_width.errors %}form-error{% endif %}" name="screen_width" value="{{ form.screen_width.value }}"></input></td>
 					</tr>
 					<tr>
 						<th>Screen Height</th>
-						<td><input type="text" class="form-control" name="screen_height" value="{{ form.screen_height.value }}"></input></td>
+						<td><input type="text" class="form-control  {% if form.screen_height.errors %}form-error{% endif %}" name="screen_height" value="{{ form.screen_height.value }}"></input></td>
 					</tr>
 					<tr>
 						<th>Rotation</th>
@@ -86,11 +92,11 @@
 					</tr>
 					<tr>
 						<th>Max Image Width</th>
-						<td><input type="text" class="form-control" name="max_image_width" value="{{ form.max_image_width.value }}"></input></td>
+						<td><input type="text" class="form-control {% if form.max_image_width.errors %}form-error{% endif %}" name="max_image_width" value="{{ form.max_image_width.value }}"></input></td>
 					</tr>
 					<tr>
 						<th>Max Image Height</th>
-						<td><input type="text" class="form-control" name="max_image_height" value="{{ form.max_image_height.value }}"></input></td>
+						<td><input type="text" class="form-control {% if form.max_image_height.errors %}form-error{% endif %}" name="max_image_height" value="{{ form.max_image_height.value }}"></input></td>
 					</tr>
 				</table>
 				<div class="panel-body">
