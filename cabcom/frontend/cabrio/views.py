@@ -47,5 +47,15 @@ class CabrioView(View):
 		if form.is_valid():
 			form.save()
 
-		return render(request, self.template_name, { 'form': form })
+		context = {}
+		context['form'] = form
+
+		if 'generate' in self.request.POST:
+			try:
+				cabrio.generate_config()
+			except Exception as e:
+				print "ARG!!"
+				context['generate_error'] = str(e)
+
+		return render(request, self.template_name, context)
 

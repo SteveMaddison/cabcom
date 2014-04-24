@@ -20,6 +20,14 @@
 	</div>
 </div>
 {% endif %}
+{% if generate_error %}
+<div class="row">
+	<div class="alert alert-danger">
+		<h4>Error</h4>
+		<h3>{{ generate_error }}</h3>
+	</div>
+</div>
+{% endif %}
 <div class="row">
 	<div class="col-md-6">
 		<form action="{% url 'frontend:cabrio' %}" method="post">

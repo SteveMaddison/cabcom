@@ -280,14 +280,30 @@ class Cabrio(FrontEnd):
 		f.write(xml.toprettyxml())
 		f.close()
 
-		# Game lists in separate files.
-		for gl in GameList.objects.all():
+		if GameList.objects.exists():
+			# Configured game lists in separate files.
+			for gl in GameList.objects.all():
+				try:
+					f = open(os.path.join(self.config_dir, gl.file_name()), 'w')
+				except:
+					raise FrontEndException('Unable to open file for writing.')
+	
+				xml = minidom.parseString(gl.config())
+				f.write(xml.toprettyxml())
+				f.close()
+		else:
+			# Create a temporary list containing all games.
+			all_games = GameList(filter = None)
+			all_games.save()
+
 			try:
-				f = open(os.path.join(self.config_dir, gl.file_name()), 'w')
+				f = open(os.path.join(self.config_dir, 'games.xml'), 'w')
 			except:
 				raise FrontEndException('Unable to open file for writing.')
 
-			xml = minidom.parseString(gl.config())
+			xml = minidom.parseString(all_games.config())
 			f.write(xml.toprettyxml())
 			f.close()
+
+			all_games.delete()
 
