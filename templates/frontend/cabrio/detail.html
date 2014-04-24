@@ -69,7 +69,7 @@
 						<td>
 							<select name="rotation" class="form-control">
 							{% for value, name in form.fields.rotation.choices %}
-								<option value="{{ value }}" {% if value == form.rotation.value %}selected="selected"{% endif %}>{{ name }}</option>
+								<option value="{{ value }}" {% if value == form.rotation.value|add:0 %}selected="selected"{% endif %}>{{ name }}</option>
 							{% endfor %}
 							</select>
 						</td>

@@ -47,7 +47,5 @@ class CabrioView(View):
 		if form.is_valid():
 			form.save()
 
-		print form.data
-
 		return render(request, self.template_name, { 'form': form })
 
