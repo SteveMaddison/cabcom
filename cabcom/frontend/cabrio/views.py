@@ -2,6 +2,7 @@ from django.http import Http404
 from django.forms import ModelForm
 from django.views.generic import View
 from django.shortcuts import render, get_object_or_404
+from cabcom.frontend.models import FrontEndException
 from cabcom.frontend.cabrio.models import Cabrio
 import os
 
@@ -53,8 +54,7 @@ class CabrioView(View):
 		if 'generate' in self.request.POST:
 			try:
 				cabrio.generate_config()
-			except Exception as e:
-				print "ARG!!"
+			except FrontEndException as e:
 				context['generate_error'] = str(e)
 
 		return render(request, self.template_name, context)

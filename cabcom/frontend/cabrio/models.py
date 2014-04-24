@@ -1,7 +1,7 @@
 from django.db import models
 from cabcom.frontend.models import FrontEnd, FrontEndException
 from cabcom.gamelist.models import Game, Filter
-from cabcom.provider.models import Provider
+from cabcom.provider.directory.models import Directory
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
 import os, errno
@@ -43,12 +43,12 @@ GFX_VALUES = (
 	('h', 'High'),
 )
 
-LOCATION_TYPES = (
-	('b', 'Background'),
-	('l', 'Logo'),
-	('s', 'Screenshot'),
-	('v', 'Video'),
-)
+LOCATION_TYPES = {
+	'b': 'background',
+	's': 'screenshot',
+	't': 'logo',
+	'v': 'video',
+}
 
 class Control(models.Model):
 	event = models.CharField(max_length = 1, choices = EVENT_TYPES, unique = True)
@@ -152,16 +152,6 @@ class GameList(models.Model):
 
 		return ET.tostring(root)
 
-class Location(models.Model):
-	type = models.CharField(max_length = 1, choices = LOCATION_TYPES)
-	provider = models.ForeignKey(Provider)
-
-	class Meta:
-		verbose_name = 'Cabrio Location'
-
-	def __unicode__(self):
-		return str(self.get_type_display())
-
 class Cabrio(FrontEnd):
 	config_dir = models.CharField(max_length = 256)
 
@@ -245,12 +235,12 @@ class Cabrio(FrontEnd):
 
 		# Locations
 		locations = ET.SubElement(root, 'locations')
-		for l in Location.objects.all():
+		for l in Directory.objects.filter(resource_type__in = ['b','s','t','v']):
 			location = ET.SubElement(locations, 'location')
 			type = ET.SubElement(location, 'type')
-			type.text = str(l.get_type_display()).lower()
+			type.text = LOCATION_TYPES[l.resource_type]
 			directory = ET.SubElement(location, 'directory')
-			directory.text = str(l.provider.directory.path)
+			directory.text = str(l.path)
 
 		return ET.tostring(root)
 
